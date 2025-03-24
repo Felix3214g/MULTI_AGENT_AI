@@ -1,0 +1,130 @@
+Designing a novel cryptographic algorithm resistant to both classical and quantum computing attacks requires leveraging post-quantum cryptographic principles. A promising approach is using **lattice-based cryptography**, which is resistant to Shor’s algorithm (used for breaking RSA and ECC with a quantum computer). Below is a structured approach for a new scheme:
+
+---
+
+## **Mathematical Foundations**
+We base the scheme on **Learning With Errors (LWE)** and **NTRU lattice problems**, which are considered hard even for quantum computers.
+
+### **Hard Problem Assumption**
+Let:
+- \(\mathbb{Z}_q\) be the ring of integers modulo \(q\), where \(q\) is a prime.
+- \(\mathbf{A} \in \mathbb{Z}_q^{n \times n}\) be a randomly generated matrix.
+- \(\mathbf{s} \in \mathbb{Z}_q^{n \times 1}\) be a secret vector.
+- \(\mathbf{e} \in \mathbb{Z}_q^{n \times 1}\) be an error vector with small entries.
+
+The problem is to distinguish \(\mathbf{A}\mathbf{s} + \mathbf{e}\) from a truly random vector in \(\mathbb{Z}_q^n\). This is computationally hard for large \(n\), forming the basis of the encryption security.
+
+---
+
+## **Key Generation**
+1. Generate a random matrix \(\mathbf{A} \in \mathbb{Z}_q^{n \times n}\).
+2. Choose a small random vector \(\mathbf{s} \in \mathbb{Z}_q^n\).
+3. Choose a small error vector \(\mathbf{e} \in \mathbb{Z}_q^n\).
+4. Compute the public key:  
+   \[
+   \mathbf{b} = \mathbf{A} \mathbf{s} + \mathbf{e}
+   \]
+5. The private key is \(\mathbf{s}\), and the public key is \((\mathbf{A}, \mathbf{b})\).
+
+---
+
+## **Encryption**
+To encrypt a message \(m \in \{0,1\}^n\):
+
+1. Convert \(m\) into a binary vector \(\mathbf{m} \in \mathbb{Z}_q^n\).
+2. Choose small random vectors \(\mathbf{r}, \mathbf{e}_1, \mathbf{e}_2\).
+3. Compute:
+   \[
+   \mathbf{u} = \mathbf{A}^T \mathbf{r} + \mathbf{e}_1
+   \]
+   \[
+   \mathbf{v} = \mathbf{b}^T \mathbf{r} + \mathbf{e}_2 + \lfloor q/2 \rfloor \mathbf{m}
+   \]
+4. The ciphertext is \((\mathbf{u}, \mathbf{v})\).
+
+---
+
+## **Decryption**
+Given ciphertext \((\mathbf{u}, \mathbf{v})\), and private key \(\mathbf{s}\):
+
+1. Compute:
+   \[
+   \mathbf{v} - \mathbf{s}^T \mathbf{u}
+   \]
+2. Since \(\mathbf{v} = \mathbf{b}^T \mathbf{r} + \mathbf{e}_2 + \lfloor q/2 \rfloor \mathbf{m}\), we substitute \(\mathbf{b} = \mathbf{A} \mathbf{s} + \mathbf{e}\):
+
+   \[
+   \mathbf{v} - \mathbf{s}^T \mathbf{u} = (\mathbf{A} \mathbf{s} + \mathbf{e})^T \mathbf{r} + \mathbf{e}_2 + \lfloor q/2 \rfloor \mathbf{m} - \mathbf{s}^T (\mathbf{A}^T \mathbf{r} + \mathbf{e}_1)
+   \]
+
+   Which simplifies to:
+
+   \[
+   \mathbf{e}^T \mathbf{r} + \mathbf{e}_2 - \mathbf{s}^T \mathbf{e}_1 + \lfloor q/2 \rfloor \mathbf{m}
+   \]
+
+   Since errors are small, we recover \(\mathbf{m}\) by rounding.
+
+---
+
+## **Security Guarantees**
+- **Resistant to Shor’s Algorithm:** The hardness of LWE and lattice-based cryptography is not affected by quantum computers.
+- **Resistant to Grover’s Algorithm:** The search space is exponentially large.
+- **Reduction to Worst-Case Hardness:** LWE is provably as hard as worst-case lattice problems.
+
+---
+
+## **Efficiency Comparison**
+| Scheme | Security Basis | Key Size | Encryption Speed | Decryption Speed |
+|--------|--------------|----------|-----------------|-----------------|
+| RSA | Factoring | Small | Fast | Fast |
+| ECC | Discrete Log | Smaller | Fast | Fast |
+| AES | Symmetric Key | Small | Very Fast | Very Fast |
+| **Our Scheme (LWE-based)** | Lattice Problems | Large | Moderate | Moderate |
+
+Trade-offs: Our scheme has larger key sizes but provides quantum resistance.
+
+---
+
+## **Example Implementation in Python**
+```python
+import numpy as np
+
+# Parameters
+n = 5
+q = 97  # Prime modulus
+
+# Key Generation
+A = np.random.randint(0, q, (n, n))
+s = np.random.randint(0, q, (n, 1))
+e = np.random.randint(-1, 2, (n, 1))  # Small noise
+
+b = (A @ s + e) % q  # Public key
+private_key = s
+public_key = (A, b)
+
+# Encryption
+m = np.random.randint(0, 2, (n, 1))  # Message in binary
+r = np.random.randint(0, 2, (n, 1))  # Random vector
+e1 = np.random.randint(-1, 2, (n, 1))
+e2 = np.random.randint(-1, 2, (1, 1))
+
+u = (A.T @ r + e1) % q
+v = (b.T @ r + e2 + (q // 2) * m) % q
+ciphertext = (u, v)
+
+# Decryption
+recovered_m = np.round((v - s.T @ u) / (q // 2)) % 2
+
+print("Original Message:\n", m)
+print("Decrypted Message:\n", recovered_m)
+```
+
+---
+
+## **Conclusion**
+- The algorithm is **quantum-safe**, leveraging lattice problems.
+- **Scalable** with security parameter \(n\).
+- **Trade-off**: Larger keys but strong security.
+
+Would you like to refine this further, perhaps for practical deployment? 🚀
