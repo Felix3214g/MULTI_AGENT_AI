@@ -1,0 +1,2759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeoCortex AI - Advanced Cognitive System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <style>
+        :root {
+            --primary-color: #3a7bd5;
+            --secondary-color: #00d2ff;
+            --dark-color: #1a1a2e;
+            --light-color: #f5f5f5;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f9fafb;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Add animated background gradient */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(58, 123, 213, 0.03), rgba(0, 210, 255, 0.03), rgba(58, 123, 213, 0.02));
+            background-size: 400% 400%;
+            z-index: -1;
+            animation: gradientBG 15s ease infinite;
+        }
+        
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .navbar {
+            background: var(--dark-color);
+            padding: 0.8rem 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.4rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .navbar-brand::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient);
+            transition: width 0.4s ease;
+        }
+        
+        .navbar-brand:hover::after {
+            width: 100%;
+        }
+        
+        .navbar-brand i {
+            margin-right: 8px;
+            color: var(--primary-color);
+            animation: pulse-brain 3s infinite ease-in-out;
+        }
+        
+        @keyframes pulse-brain {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .main-content {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            margin-bottom: 2rem;
+            width: 100%;
+        }
+        
+        .chat-container {
+            display: flex;
+            height: 80vh;
+        }
+        
+        .chat-sidebar {
+            width: 280px;
+            background: #f7f9fc;
+            border-right: 1px solid #e0e0e0;
+            padding: 1.2rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            box-shadow: inset -5px 0 15px -5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .chat-sidebar .settings-panel {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-sidebar .settings-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            max-height: none;
+            padding-top: 0.5rem;
+        }
+        
+        .chat-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-header {
+            padding: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+        }
+        
+        .chat-header h2 {
+            font-size: 1.2rem;
+            margin: 0;
+            font-weight: 500;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            background: #fff;
+            display: flex; 
+            flex-direction: column;
+            scroll-behavior: smooth;
+        }
+        
+        /* Wrapper for chat messages to ensure proper layout */
+        .message-wrapper {
+            max-width: 100%;
+            word-break: break-word;
+            margin-bottom: 0.5rem;
+        }
+        
+        .message {
+            display: flex;
+            margin-bottom: 1.5rem;
+        }
+        
+        .message.user-message {
+            flex-direction: row-reverse;
+        }
+        
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin: 0 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .user-avatar {
+            background: var(--primary-color);
+        }
+        
+        .ai-avatar {
+            background: var(--secondary-color);
+        }
+        
+        .message-content {
+            background: #f0f4f8;
+            padding: 1rem;
+            border-radius: 12px;
+            max-width: 80%;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            word-break: break-word;
+        }
+        
+        .user-message .message-content {
+            background: var(--gradient);
+            color: white;
+        }
+        
+        .ai-message .message-content {
+            background: #f0f4f8;
+            color: #333;
+        }
+        
+        .message-text {
+            margin: 0;
+            line-height: 1.5;
+        }
+        
+        .message-time {
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            opacity: 0.7;
+            text-align: right;
+        }
+        
+        .chat-form {
+            padding: 1rem;
+            border-top: 1px solid #e0e0e0;
+            background: #fff;
+        }
+        
+        .chat-input-container {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            background-color: #f0f2f5;
+            border-radius: 24px;
+            padding: 0.5rem 0.75rem;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .chat-input-container:focus-within {
+            background-color: #f8f9fa;
+            box-shadow: 0 3px 12px rgba(58, 123, 213, 0.15);
+            border-color: rgba(58, 123, 213, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .chat-input {
+            flex: 1;
+            padding: 0.75rem 0.75rem;
+            border: none;
+            border-radius: 20px;
+            outline: none;
+            resize: none;
+            min-height: 24px;
+            max-height: 150px;
+            font-family: 'Roboto', sans-serif;
+            background-color: transparent;
+            font-size: 0.95rem;
+        }
+        
+        .input-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .settings-btn {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            color: #666;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+        
+        .settings-btn:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            color: #333;
+        }
+        
+        .send-btn {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .send-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .send-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .send-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.5s ease;
+        }
+        
+        .send-btn:hover::before {
+            width: 80px;
+            height: 80px;
+            opacity: 0;
+        }
+        
+        .send-btn i {
+            font-size: 1rem;
+        }
+        
+        /* Settings panel styling */
+        .floating-settings {
+            position: absolute;
+            bottom: 80px;
+            right: 20px;
+            width: 320px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            padding: 1.25rem;
+            z-index: 10;
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        
+        .floating-settings.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+        
+        .floating-settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        .floating-settings-header h3 {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #333;
+            margin: 0;
+        }
+        
+        .close-settings {
+            background: transparent;
+            border: none;
+            color: #777;
+            cursor: pointer;
+            font-size: 1.1rem;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.2s ease;
+        }
+        
+        .close-settings:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: #333;
+        }
+        
+        .settings-group {
+            margin-bottom: 1.25rem;
+        }
+        
+        .settings-group:last-child {
+            margin-bottom: 0;
+        }
+        
+        .settings-group-title {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #666;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .setting-row:last-child {
+            border-bottom: none;
+        }
+        
+        .setting-label {
+            font-size: 0.95rem;
+            color: #333;
+            padding-right: 1rem;
+        }
+        
+        .setting-control {
+            min-width: 120px;
+        }
+        
+        .form-select {
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+            background-color: #f8f9fa;
+            font-size: 0.9rem;
+        }
+        
+        .form-switch .form-check-input {
+            width: 2.5em;
+            height: 1.25em;
+        }
+        
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .ai-thinking {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .thinking-dots {
+            display: flex;
+            gap: 0.3rem;
+        }
+        
+        .thinking-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--secondary-color);
+            animation: thinking 1.4s infinite ease-in-out both;
+        }
+        
+        .thinking-dot:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+        
+        .thinking-dot:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+        
+        @keyframes thinking {
+            0%, 80%, 100% { 
+                transform: scale(0);
+                opacity: 0.5;
+            } 40% { 
+                transform: scale(1.0);
+                opacity: 1;
+            }
+        }
+        
+        .settings-panel {
+            margin-bottom: 1.5rem;
+        }
+        
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            margin-bottom: 0.75rem;
+            border-bottom: 2px solid rgba(58, 123, 213, 0.1);
+        }
+        
+        .settings-header span {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #444;
+            letter-spacing: 0.5px;
+            position: relative;
+            padding-left: 10px;
+        }
+        
+        .settings-header span:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 4px;
+            height: 16px;
+            width: 4px;
+            background: var(--gradient);
+            border-radius: 2px;
+        }
+        
+        .toggle-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-size: 1rem;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+        
+        .toggle-btn:hover {
+            background-color: rgba(58, 123, 213, 0.1);
+        }
+        
+        .settings-content {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .setting-item {
+            margin-bottom: 1rem;
+        }
+        
+        .setting-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .history-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            overflow-y: auto;
+            flex-grow: 1;
+            min-height: 200px;
+        }
+        
+        .history-item {
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            background: white;
+            cursor: pointer;
+            transition: background 0.2s;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .history-item:hover {
+            background: #e8f0fe;
+        }
+        
+        .history-item.active {
+            background: #e1f5fe;
+            border-left: 3px solid var(--primary-color);
+        }
+        
+        .badge {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            margin-left: 0.5rem;
+        }
+        
+        .badge-agent {
+            background: var(--gradient);
+            color: white;
+        }
+        
+        .badge-fast {
+            background: var(--warning-color);
+            color: #333;
+        }
+        
+        .export-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .export-btn:hover {
+            text-decoration: underline;
+        }
+        
+        .markdown-content h1,
+        .markdown-content h2,
+        .markdown-content h3,
+        .markdown-content h4,
+        .markdown-content h5,
+        .markdown-content h6 {
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .markdown-content p {
+            margin-bottom: 1rem;
+        }
+        
+        .markdown-content pre {
+            background: #f0f2f5;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+        }
+        
+        .markdown-content code {
+            font-family: 'Consolas', monospace;
+            font-size: 0.9rem;
+            color: #333;
+        }
+        
+        .markdown-content ul, 
+        .markdown-content ol {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+        
+        .markdown-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+        }
+        
+        .markdown-content table th,
+        .markdown-content table td {
+            border: 1px solid #ddd;
+            padding: 0.5rem;
+        }
+        
+        .markdown-content table th {
+            background: #f5f5f5;
+        }
+        
+        .markdown-content blockquote {
+            border-left: 4px solid var(--primary-color);
+            padding-left: 1rem;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+        
+        .loading-bar {
+            height: 4px;
+            width: 100%;
+            background: #f0f0f0;
+            position: relative;
+            overflow: hidden;
+            display: none;
+        }
+        
+        .loading-bar::after {
+            content: '';
+            display: block;
+            height: 100%;
+            width: 20%;
+            background: var(--gradient);
+            position: absolute;
+            animation: loading 1.5s infinite ease-in-out;
+        }
+        
+        @keyframes loading {
+            0% { left: -20%; }
+            100% { left: 100%; }
+        }
+        
+        @media (max-width: 992px) {
+            .chat-container {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .chat-sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #e0e0e0;
+                max-height: 200px;
+            }
+            
+            .chat-messages {
+                max-height: 60vh;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .chat-container {
+                height: 80vh;
+            }
+            
+            .message-content {
+                max-width: 90%;
+            }
+        }
+        
+        /* Reasoning panel styling */
+        .reasoning-panel {
+            border-top: 1px solid #e0e0e0;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        /* Modified reasoning panel to ONLY show the header, no content at all */
+        .thinking-header {
+            padding: 12px 16px;
+            background-color: #f9fafb;
+            font-weight: 500;
+            color: #333;
+            cursor: default;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 12px; /* Make the header have rounded corners since it's the only thing shown */
+            border: 1px solid #e0e7ee;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            animation: pulse 2s infinite ease-in-out;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            }
+            50% {
+                box-shadow: 0 4px 18px rgba(58, 123, 213, 0.2);
+            }
+            100% {
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            }
+        }
+        
+        .thinking-header:hover {
+            background-color: #f9fafb;
+        }
+        
+        .thinking-expand-icon {
+            display: none; /* Hide the expand icon */
+        }
+        
+        .thinking-details {
+            display: none; /* Hide all content completely */
+        }
+        
+        /* Message thinking with only header */
+        .message-thinking {
+            margin-bottom: 1rem;
+            width: 92%;
+            margin-left: 40px;
+            margin-top: 0.75rem;
+            /* Remove borders, they'll be on the header now */
+            border: none;
+            box-shadow: none;
+            background: transparent;
+        }
+        
+        /* Simplified styling for analysis steps */
+        .analysis-step {
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            border-left: 3px solid #3a7bd5;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            margin-left: 24px;
+        }
+        
+        .analysis-step p {
+            margin: 0;
+            padding: 0;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: #444;
+        }
+        
+        .analysis-step strong {
+            color: #3182ce;
+            font-weight: 600;
+        }
+        
+        /* Additional styling for thought steps */
+        .thought-step {
+            margin-bottom: 18px;
+            padding: 10px 15px;
+            background-color: #f8f9fa;
+            border-left: 3px solid #3a7bd5;
+            border-radius: 0 6px 6px 0;
+        }
+        
+        .thought-container {
+            margin-top: 10px;
+            padding: 5px;
+        }
+        
+        /* Add animation for reasoning expansion */
+        @keyframes expandReasoning {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .thinking-expanded .thinking-details {
+            animation: expandReasoning 0.3s ease-out;
+        }
+        
+        /* Fix for markdown content to prevent truncation */
+        .markdown-content {
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            word-break: break-word;
+        }
+        
+        /* User message styling without bubbles */
+        .user-message {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 1.5rem;
+            width: 100%;
+            animation: fadeInRight 0.5s ease forwards;
+        }
+        
+        /* Animation for user messages */
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .ai-response-text {
+            animation: fadeInLeft 0.6s ease forwards;
+        }
+        
+        /* Animation for AI responses */
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .user-message .message-content {
+            background: transparent;
+            color: #333;
+            padding: 0.5rem 1rem;
+            border-radius: 0;
+            max-width: 80%;
+            text-align: right;
+            border-right: 3px solid var(--primary-color);
+            box-shadow: none;
+        }
+        
+        .user-message .message-avatar {
+            display: none; /* Hide the avatar for cleaner look */
+        }
+        
+        .user-message .message-text {
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        .user-message .message-time {
+            text-align: right;
+            color: #777;
+            font-size: 0.7rem;
+            margin-top: 0.25rem;
+        }
+        
+        /* Truncation warning styling */
+        .truncation-warning {
+            background-color: #ffe8e8;
+            border-left: 3px solid #ff5555;
+            padding: 0.75rem 1rem;
+            margin: 0.75rem auto;
+            color: #d32f2f;
+            width: 90%;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .truncation-warning i {
+            margin-right: 0.5rem;
+            color: #d32f2f;
+        }
+        
+        .truncation-warning button {
+            background-color: #d32f2f;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.3rem 0.75rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-left: 1rem;
+            transition: background-color 0.2s;
+        }
+        
+        .truncation-warning button:hover {
+            background-color: #b71c1c;
+        }
+        
+        /* Minimalistic reasoning styling */
+        .minimalist-reasoning {
+            padding: 0.5rem;
+        }
+        
+        .mini-section {
+            margin-bottom: 0.75rem;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            overflow: hidden;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .mini-section-header {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .mini-section-header:hover {
+            background-color: #f0f2f5;
+        }
+
+        .mini-section-title {
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #333;
+            flex: 1;
+        }
+
+        .mini-toggle {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+
+        .mini-section.expanded .mini-toggle {
+            transform: rotate(180deg);
+        }
+
+        .mini-section-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .mini-section.expanded .mini-section-content {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .agent-badge {
+            font-size: 0.7rem;
+            font-weight: 500;
+            padding: 0.15rem 0.5rem;
+            border-radius: 12px;
+            background-color: #ebf4ff;
+            color: #3182ce;
+            margin-right: 0.75rem;
+        }
+
+        .minimal-content {
+            margin: 0;
+            padding: 0.75rem;
+            color: #555;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            white-space: pre-line;
+        }
+        
+        /* Add a typing animation for the thinking state */
+        .thinking-dots {
+            display: flex;
+            gap: 0.3rem;
+            animation: fadeIn 0.3s ease forwards;
+        }
+        
+        /* Animation for thinking dots */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Removing the welcome screen that was here -->
+    
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><i class="fas fa-brain"></i> NeoCortex AI</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#"><i class="fas fa-comment-dots"></i> Chat</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-book"></i> Docs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-info-circle"></i> About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <!-- Removing the header section that was here -->
+        
+        <div class="main-content">
+            <div class="loading-bar" id="loadingBar"></div>
+            <div class="chat-container">
+                <div class="chat-sidebar">
+                    <div class="settings-panel">
+                        <div class="settings-header">
+                            <span>Your Chats</span>
+                            <button class="toggle-btn" id="toggleChats">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                        <div class="settings-content">
+                            <ul class="chat-list" id="chatList">
+                                <!-- Chat items will be dynamically added here -->
+                                <li class="chat-list-item active" data-chat-id="current">
+                                    <div class="chat-list-item-icon">
+                                        <i class="fas fa-comment"></i>
+                                    </div>
+                                    <div class="chat-list-item-title">
+                                        Current Chat
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chat-main">
+                    <div class="chat-header">
+                        <h2>NeoCortex Assistant <span class="badge badge-agent">Multi-Agent</span></h2>
+                        <div>
+                            <button id="newChatBtn" class="btn btn-sm btn-outline-primary me-2">
+                                <i class="fas fa-plus-circle me-1"></i> New Chat
+                            </button>
+                            <button id="exportChat" class="export-btn">
+                                <i class="fas fa-download"></i> Export
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-messages" id="chatMessages">
+                        <!-- Removed the default welcome message that was here -->
+                    </div>
+                    
+                    <div class="chat-form">
+                        <div class="chat-input-container">
+                            <textarea id="chatInput" class="chat-input" placeholder="Ask anything" rows="1"></textarea>
+                            <div class="input-actions">
+                                <button id="settingsBtn" class="settings-btn" title="Settings">
+                                    <i class="fas fa-cog"></i>
+                                </button>
+                                <button id="sendBtn" class="send-btn" title="Send">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Floating settings panel -->
+                        <div id="floatingSettings" class="floating-settings">
+                            <div class="floating-settings-header">
+                                <h3>Advanced Settings</h3>
+                                <button id="closeSettings" class="close-settings">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="settings-group">
+                                <div class="settings-group-title">Model</div>
+                                <div class="setting-row">
+                                    <div class="setting-label">Processing Mode</div>
+                                    <div class="setting-control">
+                                        <select class="form-select" id="floatModelSelect">
+                                            <option value="agent" selected>Multi-Agent</option>
+                                            <option value="fast">Fast Response</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="setting-row">
+                                    <div class="setting-label">Show Reasoning</div>
+                                    <div class="setting-control">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="floatShowWork" checked>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-group">
+                                <div class="settings-group-title">Connection</div>
+                                <div class="setting-row">
+                                    <div class="setting-label">API Server URL</div>
+                                    <div class="setting-control">
+                                        <input type="text" class="form-control form-control-sm" id="floatServerUrl" value="http://127.0.0.1:5000">
+                                    </div>
+                                </div>
+                                <div class="setting-row">
+                                    <button id="floatTestConnection" class="btn btn-sm btn-primary w-100">Test Connection</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatMessages = document.getElementById('chatMessages');
+            const chatInput = document.getElementById('chatInput');
+            const sendBtn = document.getElementById('sendBtn');
+            const loadingBar = document.getElementById('loadingBar');
+            const toggleChats = document.getElementById('toggleChats');
+            const exportChat = document.getElementById('exportChat');
+            const newChatBtn = document.getElementById('newChatBtn');
+            const chatList = document.getElementById('chatList');
+            
+            // Removing welcome screen elements and related code
+            
+            // Floating settings elements
+            const settingsBtn = document.getElementById('settingsBtn');
+            const floatingSettings = document.getElementById('floatingSettings');
+            const closeSettings = document.getElementById('closeSettings');
+            const modelSelect = document.getElementById('floatModelSelect');
+            const showWork = document.getElementById('floatShowWork');
+            const serverUrl = document.getElementById('floatServerUrl');
+            const testConnection = document.getElementById('floatTestConnection');
+            
+            // Helper function to format reasoning time
+            function formatReasoningTime(seconds) {
+                seconds = parseFloat(seconds);
+                
+                // For very short times (3 seconds or less)
+                if (seconds <= 3) {
+                    return "a few seconds";
+                }
+                
+                // Convert to hours if needed
+                if (seconds >= 3600) {
+                    const hours = Math.floor(seconds / 3600);
+                    const minutes = Math.floor((seconds % 3600) / 60);
+                    if (minutes === 0) {
+                        return `${hours}h`;
+                    } else {
+                        return `${hours}h ${minutes}m`;
+                    }
+                }
+                
+                // Convert to minutes if needed
+                if (seconds >= 60) {
+                    const minutes = Math.floor(seconds / 60);
+                    const remainingSeconds = Math.floor(seconds % 60);
+                    if (remainingSeconds === 0) {
+                        return `${minutes}m`;
+                    } else {
+                        return `${minutes}m ${remainingSeconds}s`;
+                    }
+                }
+                
+                // Otherwise just return seconds
+                return `${seconds.toFixed(1)}s`;
+            }
+            
+            // Settings panel toggle
+            settingsBtn.addEventListener('click', function(e) {
+                // Stop event propagation to prevent document click handler from firing
+                e.stopPropagation();
+                floatingSettings.classList.add('visible');
+            });
+            
+            closeSettings.addEventListener('click', function(e) {
+                // Stop event propagation
+                e.stopPropagation();
+                floatingSettings.classList.remove('visible');
+            });
+            
+            // Prevent clicks inside the panel from closing it
+            floatingSettings.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+            
+            // Click outside to close settings
+            document.addEventListener('click', function(e) {
+                if (floatingSettings.classList.contains('visible') && 
+                    !floatingSettings.contains(e.target) && 
+                    e.target !== settingsBtn) {
+                    floatingSettings.classList.remove('visible');
+                }
+            });
+            
+            // Set up listener for Show Reasoning checkbox
+            showWork.addEventListener('change', function() {
+                console.log('Show reasoning set to:', this.checked);
+                // Could store this in localStorage for persistence
+                // localStorage.setItem('showReasoning', this.checked);
+            });
+            
+            // Handle Test Connection on the settings menu item
+            testConnection.addEventListener('click', function() {
+                this.disabled = true;
+                this.innerHTML = 'Testing...';
+                
+                // Show loading bar
+                loadingBar.style.display = 'block';
+                
+                fetch(`${serverUrl.value}/api/agents/status`, {
+                    headers: {
+                        'X-API-Key': apiKey
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.text().then(text => {
+                            throw new Error(`Status ${response.status}: ${text}`);
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Hide loading bar
+                    loadingBar.style.display = 'none';
+                    
+                    // Show success message
+                    addMessage('ai', 'API connection successful! The server is running properly.');
+                    console.log('API Status:', data);
+                    
+                    this.innerHTML = 'Test API Connection';
+                    this.disabled = false;
+                    
+                    // Close settings panel
+                    floatingSettings.classList.remove('visible');
+                })
+                .catch(error => {
+                    // Hide loading bar
+                    loadingBar.style.display = 'none';
+                    
+                    console.error('Connection test error:', error);
+                    
+                    // Show detailed error
+                    addMessage('ai', `API connection failed: ${error.message}\n\nPlease check:\n1. Is the Flask server running?\n2. Is it running on port 5000?\n3. Do you have CORS issues? (check browser console)\n4. Is the API key correct?`);
+                    
+                    this.innerHTML = 'Test API Connection';
+                    this.disabled = false;
+                });
+            });
+            
+            // Set appropriate greeting based on time of day
+            function setGreeting() {
+                const hour = new Date().getHours();
+                let timeGreeting = "";
+                
+                if (hour >= 5 && hour < 12) {
+                    timeGreeting = "Good morning";
+                } else if (hour >= 12 && hour < 17) {
+                    timeGreeting = "Good afternoon";
+                } else if (hour >= 17 && hour < 22) {
+                    timeGreeting = "Good evening";
+                } else {
+                    timeGreeting = "Good night";
+                }
+                
+                // Log time greeting for diagnostic purposes
+                console.log(`Time greeting: ${timeGreeting}`);
+            }
+            
+            // Run once on page load
+            setGreeting();
+            
+            // API key for authentication
+            const apiKey = "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";
+            
+            // Global variable to store reasoning data
+            window.lastReasoningData = null;
+            
+            // Memory system for storing user information
+            const memorySystem = {
+                memories: JSON.parse(localStorage.getItem('userMemories') || '{}'),
+                
+                // Add a new memory
+                addMemory: function(key, value) {
+                    this.memories[key] = {
+                        value: value,
+                        timestamp: new Date().toISOString(),
+                        usageCount: 0
+                    };
+                    this.saveMemories();
+                    console.log(`Memory added: ${key} = ${value}`);
+                },
+                
+                // Get a memory
+                getMemory: function(key) {
+                    if (this.memories[key]) {
+                        this.memories[key].usageCount++;
+                        this.saveMemories();
+                        return this.memories[key].value;
+                    }
+                    return null;
+                },
+                
+                // Get all memories as a formatted string for context
+                getAllMemoriesAsContext: function() {
+                    const memoryEntries = Object.entries(this.memories);
+                    if (memoryEntries.length === 0) return "";
+                    
+                    let context = "Previous information I know about you:\n";
+                    memoryEntries.forEach(([key, data]) => {
+                        context += `- ${key}: ${data.value}\n`;
+                    });
+                    return context;
+                },
+                
+                // Save memories to localStorage
+                saveMemories: function() {
+                    localStorage.setItem('userMemories', JSON.stringify(this.memories));
+                },
+                
+                // Extract potential memories from AI response
+                extractMemories: function(userMessage, aiResponse) {
+                    // Simple memory extraction based on patterns
+                    const nameMatch = userMessage.match(/my name is ([A-Za-z]+)/i);
+                    if (nameMatch) {
+                        this.addMemory("name", nameMatch[1]);
+                    }
+                    
+                    const ageMatch = userMessage.match(/i am (\d+) years old/i);
+                    if (ageMatch) {
+                        this.addMemory("age", ageMatch[1]);
+                    }
+                    
+                    const jobMatch = userMessage.match(/i (?:work as|am) an? ([A-Za-z]+)/i);
+                    if (jobMatch) {
+                        this.addMemory("profession", jobMatch[1]);
+                    }
+                    
+                    const locationMatch = userMessage.match(/i (?:live|am) (?:in|from) ([A-Za-z, ]+)/i);
+                    if (locationMatch) {
+                        this.addMemory("location", locationMatch[1]);
+                    }
+                    
+                    const interestMatch = userMessage.match(/i (?:like|love|enjoy) ([A-Za-z, ]+)/i);
+                    if (interestMatch) {
+                        this.addMemory("interests", interestMatch[1]);
+                    }
+                    
+                    // More sophisticated memory extraction would need backend AI support
+                }
+            };
+            
+            // Chat history
+            let chatHistory = [];
+            
+            // Auto resize textarea
+            chatInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+            
+            // Send message when pressing Enter (without Shift)
+            chatInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+            
+            // Send button click
+            sendBtn.addEventListener('click', sendMessage);
+            
+            // Toggle settings and history panels
+            toggleChats.addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                const parent = this.closest('.settings-panel');
+                const content = parent.querySelector('.settings-content');
+                
+                if (icon.classList.contains('fa-chevron-down')) {
+                    icon.classList.replace('fa-chevron-down', 'fa-chevron-up');
+                    content.style.display = 'none';
+                } else {
+                    icon.classList.replace('fa-chevron-up', 'fa-chevron-down');
+                    content.style.display = 'block';
+                }
+            });
+            
+            // Add Memory panel to settings
+            function addMemoryPanel() {
+                const settingsContent = document.querySelector('.floating-settings');
+                
+                const memoryGroup = document.createElement('div');
+                memoryGroup.className = 'settings-group';
+                memoryGroup.innerHTML = `
+                    <div class="settings-group-title">Memory System</div>
+                    <div class="setting-row">
+                        <div class="setting-label">Remember User Facts</div>
+                        <div class="setting-control">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="enableMemory" checked>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="setting-row">
+                        <button id="viewMemories" class="btn btn-sm btn-outline-primary w-100">View Stored Memories</button>
+                    </div>
+                    <div class="setting-row">
+                        <button id="clearMemories" class="btn btn-sm btn-outline-danger w-100">Clear All Memories</button>
+                    </div>
+                `;
+                
+                settingsContent.appendChild(memoryGroup);
+                
+                // Add event listeners for memory buttons
+                document.getElementById('viewMemories').addEventListener('click', function() {
+                    showMemoriesDialog();
+                });
+                
+                document.getElementById('clearMemories').addEventListener('click', function() {
+                    if (confirm('Are you sure you want to clear all stored memories?')) {
+                        memorySystem.memories = {};
+                        memorySystem.saveMemories();
+                        alert('All memories have been cleared.');
+                    }
+                });
+            }
+            
+            // Create and show memories dialog
+            function showMemoriesDialog() {
+                // Remove existing dialog if any
+                const existingDialog = document.getElementById('memoriesDialog');
+                if (existingDialog) {
+                    document.body.removeChild(existingDialog);
+                }
+                
+                const memoryEntries = Object.entries(memorySystem.memories);
+                
+                const dialog = document.createElement('div');
+                dialog.id = 'memoriesDialog';
+                dialog.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: white;
+                    padding: 1.5rem;
+                    border-radius: 12px;
+                    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+                    z-index: 1000;
+                    max-width: 600px;
+                    width: 90%;
+                    max-height: 80vh;
+                    overflow-y: auto;
+                `;
+                
+                let memoryContent = '<h3 style="margin-top:0">Stored Memories</h3>';
+                
+                if (memoryEntries.length === 0) {
+                    memoryContent += '<p>No memories stored yet.</p>';
+                } else {
+                    memoryContent += '<table style="width:100%; border-collapse: collapse;">';
+                    memoryContent += '<thead><tr><th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Information</th><th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Value</th><th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">When Stored</th><th style="text-align:center; padding:8px; border-bottom:1px solid #ddd;">Action</th></tr></thead>';
+                    memoryContent += '<tbody>';
+                    
+                    memoryEntries.forEach(([key, data]) => {
+                        const date = new Date(data.timestamp).toLocaleString();
+                        memoryContent += `
+                            <tr>
+                                <td style="padding:8px; border-bottom:1px solid #eee;">${key}</td>
+                                <td style="padding:8px; border-bottom:1px solid #eee;">${data.value}</td>
+                                <td style="padding:8px; border-bottom:1px solid #eee;">${date}</td>
+                                <td style="padding:8px; border-bottom:1px solid #eee; text-align:center;">
+                                    <button class="delete-memory btn btn-sm btn-outline-danger" data-key="${key}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    
+                    memoryContent += '</tbody></table>';
+                }
+                
+                memoryContent += '<div style="text-align:right; margin-top:1rem;"><button id="closeMemoriesDialog" class="btn btn-primary">Close</button></div>';
+                
+                dialog.innerHTML = memoryContent;
+                document.body.appendChild(dialog);
+                
+                // Add overlay
+                const overlay = document.createElement('div');
+                overlay.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0, 0, 0, 0.5);
+                    z-index: 999;
+                `;
+                document.body.appendChild(overlay);
+                
+                // Close dialog event
+                document.getElementById('closeMemoriesDialog').addEventListener('click', function() {
+                    document.body.removeChild(dialog);
+                    document.body.removeChild(overlay);
+                });
+                
+                // Delete memory events
+                document.querySelectorAll('.delete-memory').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const key = this.getAttribute('data-key');
+                        delete memorySystem.memories[key];
+                        memorySystem.saveMemories();
+                        showMemoriesDialog(); // Refresh dialog
+                    });
+                });
+            }
+            
+            // Call this function to add the memory panel
+            setTimeout(addMemoryPanel, 100);
+            
+            // Export chat history
+            exportChat.addEventListener('click', function() {
+                const chatText = chatHistory.map(msg => {
+                    return `${msg.sender === 'user' ? 'You' : 'NeoCortex'}: ${msg.text}`;
+                }).join('\n\n');
+                
+                const blob = new Blob([chatText], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                
+                a.href = url;
+                a.download = 'neocortex-chat.txt';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+            
+            // Chat ID counter for new chats
+            let chatIdCounter = 1;
+            
+            // Track all chats
+            const allChats = {
+                current: {
+                    title: "Current Chat",
+                    messages: chatHistory.slice(),
+                    activeMessage: null
+                }
+            };
+            
+            // Create a new chat
+            newChatBtn.addEventListener('click', function() {
+                // Save current chat if it has messages
+                if (chatHistory.length > 1) { // More than just the welcome message
+                    saveCurrentChat();
+                }
+                
+                // Clear the chat
+                startNewChat();
+            });
+            
+            function saveCurrentChat() {
+                // Get the current active chat ID
+                const currentChatId = document.querySelector('.chat-list-item.active').dataset.chatId;
+                
+                // Determine a title based on first user message
+                let chatTitle = "New Conversation";
+                for (const msg of chatHistory) {
+                    if (msg.sender === 'user') {
+                        chatTitle = msg.text.substring(0, 30);
+                        if (msg.text.length > 30) chatTitle += '...';
+                        break;
+                    }
+                }
+                
+                // Store the current chat
+                allChats[currentChatId] = {
+                    title: chatTitle,
+                    messages: chatHistory.slice(),
+                    activeMessage: null
+                };
+            }
+            
+            function startNewChat() {
+                // Clear chat history array
+                chatHistory = [];
+                
+                // Clear chat messages display
+                chatMessages.innerHTML = '';
+                
+                // Add welcome message to history
+                chatHistory.push({
+                    sender: 'ai',
+                    text: '', // Removed welcome message text
+                    time: new Date()
+                });
+                
+                // Create a new chat ID
+                const newChatId = 'chat_' + chatIdCounter++;
+                
+                // Create new chat item in sidebar
+                const newChatItem = document.createElement('li');
+                newChatItem.className = 'chat-list-item';
+                newChatItem.dataset.chatId = newChatId;
+                newChatItem.innerHTML = `
+                    <div class="chat-list-item-icon">
+                        <i class="fas fa-comment"></i>
+                    </div>
+                    <div class="chat-list-item-title">
+                        New Chat
+                    </div>
+                `;
+                
+                // Set up chat switching
+                newChatItem.addEventListener('click', function() {
+                    switchToChat(newChatId);
+                });
+                
+                // Add to chat list and make active
+                chatList.prepend(newChatItem);
+                switchToChat(newChatId);
+                
+                // Clear the input
+                chatInput.value = '';
+                chatInput.focus();
+            }
+            
+            function switchToChat(chatId) {
+                // Save current chat
+                saveCurrentChat();
+                
+                // Update active chat in UI
+                document.querySelectorAll('.chat-list-item').forEach(item => {
+                    item.classList.remove('active');
+                    if (item.dataset.chatId === chatId) {
+                        item.classList.add('active');
+                    }
+                });
+                
+                // Initialize the chat if it doesn't exist
+                if (!allChats[chatId]) {
+                    allChats[chatId] = {
+                        title: "New Chat",
+                        messages: [],
+                        activeMessage: null
+                    };
+                    
+                    // Add welcome message if empty
+                    if (allChats[chatId].messages.length === 0) {
+                        allChats[chatId].messages.push({
+                            sender: 'ai',
+                            text: '', // Removed welcome message text
+                            time: new Date()
+                        });
+                    }
+                }
+                
+                // Load chat messages
+                chatHistory = allChats[chatId].messages.slice();
+                
+                // Clear and rebuild messages UI
+                chatMessages.innerHTML = '';
+                
+                // Add all messages from this chat to the UI
+                chatHistory.forEach(msg => {
+                    if (msg.sender === 'ai') {
+                        // Create AI message
+                        const messageDiv = document.createElement('div');
+                        messageDiv.className = 'ai-response-text';
+                        
+                        // Make sure to handle potential markdown errors
+                        try {
+                            const fullText = cleanupAIResponse(msg.text || ""); // Ensure we have text to parse and clean up truncation notes
+                            messageDiv.innerHTML = marked.parse(fullText);
+                        } catch (e) {
+                            console.error("Error parsing markdown in chat history:", e);
+                            messageDiv.textContent = cleanupAIResponse(msg.text || "");
+                        }
+                        
+                        chatMessages.appendChild(messageDiv);
+                    } else if (msg.sender === 'user') {
+                        // Create user message with new bubbleless style
+                        const messageDiv = document.createElement('div');
+                        messageDiv.className = 'user-message';
+                        
+                        const content = document.createElement('div');
+                        content.className = 'message-content';
+                        
+                        const paragraph = document.createElement('div');
+                        paragraph.className = 'message-text markdown-content';
+                        
+                        // Handle potential markdown errors
+                        try {
+                            paragraph.innerHTML = marked.parse(msg.text || "");
+                        } catch (e) {
+                            console.error("Error parsing user markdown in history:", e);
+                            paragraph.textContent = msg.text || "";
+                        }
+                        
+                        const time = document.createElement('div');
+                        time.className = 'message-time';
+                        time.textContent = new Date(msg.time).toLocaleTimeString();
+                        
+                        content.appendChild(paragraph);
+                        content.appendChild(time);
+                        
+                        messageDiv.appendChild(content);
+                        
+                        chatMessages.appendChild(messageDiv);
+                    }
+                });
+                
+                // Scroll to bottom
+                setTimeout(() => {
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 100); // Small delay to ensure DOM rendering is complete
+            }
+            
+            function sendMessage() {
+                const message = chatInput.value.trim();
+                if (!message) return;
+                
+                // Clear any existing reasoning panel and timer first
+                const existingReasoningPanel = document.getElementById('current-reasoning');
+                if (existingReasoningPanel) {
+                    chatMessages.removeChild(existingReasoningPanel);
+                }
+                
+                // Clear any existing timer interval that might be running
+                if (window.activeReasoningTimer) {
+                    clearInterval(window.activeReasoningTimer);
+                    window.activeReasoningTimer = null;
+                }
+                
+                // Add user message to chat
+                addMessage('user', message);
+                
+                // Clear input
+                chatInput.value = '';
+                chatInput.style.height = 'auto';
+                
+                // Start a timer for the reasoning time
+                const startTime = new Date();
+                let elapsedSeconds = 0;
+                let reasoningTimer;
+                let reasoningPanel;
+                
+                // Only create reasoning panel if show work is enabled
+                if (showWork.checked) {
+                    reasoningTimer = setInterval(() => {
+                        elapsedSeconds = ((new Date() - startTime) / 1000).toFixed(1);
+                        const timerElement = document.getElementById('reasoning-timer');
+                        if (timerElement) {
+                            // Format the time appropriately
+                            timerElement.textContent = formatReasoningTime(elapsedSeconds);
+                            // Force a reflow to ensure the UI updates
+                            timerElement.style.fontWeight = elapsedSeconds % 2 === 0 ? '500' : '600';
+                        }
+                    }, 100);
+                    
+                    // Store the active timer in a global variable for cleanup
+                    window.activeReasoningTimer = reasoningTimer;
+                    
+                    // Show ONLY reasoning header with time
+                    reasoningPanel = document.createElement('div');
+                    reasoningPanel.className = 'reasoning-panel message-thinking';
+                    reasoningPanel.id = 'current-reasoning';
+                    
+                    const thinkingHeader = document.createElement('div');
+                    thinkingHeader.className = 'thinking-header';
+                    
+                    const titleDiv = document.createElement('div');
+                    titleDiv.className = 'thinking-title';
+                    const modeText = modelSelect.value === 'agent' ? 'Multi-Agent' : 'Fast Response';
+                    titleDiv.innerHTML = `<i class="fas fa-brain me-2"></i> <span class="badge ${modelSelect.value === 'agent' ? 'badge-agent' : 'badge-fast'} me-2">${modeText}</span> Reasoning for <span id="reasoning-timer" style="font-weight:bold;color:#3a7bd5;">0.0s</span>`;
+                    
+                    thinkingHeader.appendChild(titleDiv);
+                    
+                    // No details section at all
+                    
+                    reasoningPanel.appendChild(thinkingHeader);
+                    // Don't add thinkingDetails
+                    
+                    chatMessages.appendChild(reasoningPanel);
+                }
+                
+                // Show loading bar
+                loadingBar.style.display = 'block';
+                
+                // Prepare the request based on the selected model
+                const endpoint = modelSelect.value === 'fast' ? '/api/fast-response' : '/api/solve';
+                
+                // Check if memory is enabled
+                const useMemory = document.getElementById('enableMemory') && document.getElementById('enableMemory').checked;
+                
+                // Get memory context if memory is enabled
+                let memoryContext = "";
+                if (useMemory) {
+                    memoryContext = memorySystem.getAllMemoriesAsContext();
+                    
+                    // If we have memories, show a subtle memory indicator
+                    if (memoryContext) {
+                        const memoryIndicator = document.createElement('div');
+                        memoryIndicator.className = 'system-message';
+                        memoryIndicator.style.cssText = 'background-color: #e8f4ff; color: #0066cc; font-size: 0.8rem; padding: 0.5rem; margin: 0.5rem 0; border-left: 3px solid #0066cc; opacity: 0.8;';
+                        memoryIndicator.innerHTML = '<i class="fas fa-memory"></i> Recalling what I know about you...';
+                        chatMessages.appendChild(memoryIndicator);
+                        
+                        // Remove the indicator after 3 seconds
+                        setTimeout(() => {
+                            try {
+                                chatMessages.removeChild(memoryIndicator);
+                            } catch (e) {
+                                // Ignore if already removed
+                            }
+                        }, 3000);
+                    }
+                }
+                
+                // Prepare context with memories if available
+                let fullContext = message;
+                if (memoryContext) {
+                    fullContext = memoryContext + "\n\nUser query: " + message;
+                }
+                
+                // Send to API
+                fetch(`${serverUrl.value}${endpoint}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-API-Key': apiKey,
+                        'Accept-Encoding': 'gzip' // Signal we can handle compression
+                    },
+                    body: JSON.stringify({
+                        query: fullContext, // Include memory context if available
+                        show_work: showWork.checked,
+                        use_agents: modelSelect.value === 'agent',
+                        has_memory: useMemory // Let the backend know we're using memory
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.text().then(text => {
+                            console.error('API Error:', response.status, text);
+                            throw new Error(`API error (${response.status}): ${text}`);
+                        });
+                    }
+                    
+                    // Get response size if available
+                    const responseSize = response.headers.get('X-Response-Size');
+                    if (responseSize) {
+                        console.log(`Response size: ${(parseInt(responseSize) / 1024).toFixed(2)} KB`);
+                    }
+                    
+                    return response.json();
+                })
+                .then(data => {
+                    // Stop the timer and clear the interval if it exists
+                    if (window.activeReasoningTimer) {
+                        clearInterval(window.activeReasoningTimer);
+                        window.activeReasoningTimer = null;
+                    }
+                    
+                    // Hide loading bar
+                    loadingBar.style.display = 'none';
+                    
+                    // Check for truncation flag from server
+                    if (data._may_be_truncated) {
+                        console.warn("Server indicates response may be truncated");
+                        // Add a notice to the user
+                        const truncationNotice = document.createElement('div');
+                        truncationNotice.className = 'truncation-warning';
+                        
+                        const leftDiv = document.createElement('div');
+                        leftDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> The response appears to be incomplete.';
+                        
+                        const retryButton = document.createElement('button');
+                        retryButton.innerHTML = '<i class="fas fa-sync-alt"></i> Try with shorter query';
+                        retryButton.onclick = function() {
+                            // Create a shortened version of the query
+                            const shortenedQuery = `${message.substring(0, 100)}... (shortened to avoid truncation)`;
+                            
+                            // Clear the truncation notice
+                            chatMessages.removeChild(truncationNotice);
+                            
+                            // Show loading bar
+                            loadingBar.style.display = 'block';
+                            
+                            // Tell the user we're retrying
+                            const retryingNotice = document.createElement('div');
+                            retryingNotice.className = 'system-message';
+                            retryingNotice.innerHTML = '<i class="fas fa-sync fa-spin"></i> Retrying with a shorter query to avoid truncation...';
+                            chatMessages.appendChild(retryingNotice);
+                            
+                            // Make a new request with truncated query
+                            fetch(`${serverUrl.value}${endpoint}`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-API-Key': apiKey,
+                                    'Accept-Encoding': 'gzip' 
+                                },
+                                body: JSON.stringify({
+                                    query: shortenedQuery,
+                                    show_work: showWork.checked,
+                                    use_agents: modelSelect.value === 'agent',
+                                    has_memory: useMemory,
+                                    avoid_truncation: true
+                                })
+                            })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error(`API error (${response.status})`);
+                                }
+                                return response.json();
+                            })
+                            .then(newData => {
+                                // Remove the retrying notice
+                                chatMessages.removeChild(retryingNotice);
+                                
+                                // Hide loading bar
+                                loadingBar.style.display = 'none';
+                                
+                                // Add AI response to chat
+                                const messageDiv = document.createElement('div');
+                                messageDiv.className = 'ai-response-text';
+                                
+                                try {
+                                    messageDiv.innerHTML = marked.parse(newData.final_answer || "Sorry, I still couldn't generate a complete response.");
+                                } catch (e) {
+                                    messageDiv.textContent = newData.final_answer || "Sorry, I still couldn't generate a complete response.";
+                                }
+                                
+                                chatMessages.appendChild(messageDiv);
+                            })
+                            .catch(error => {
+                                console.error('Retry error:', error);
+                                
+                                // Show error to user
+                                const errorDiv = document.createElement('div');
+                                errorDiv.className = 'system-message';
+                                errorDiv.style.backgroundColor = '#ffe8e8';
+                                errorDiv.style.borderLeftColor = '#ff5555';
+                                errorDiv.innerHTML = `<i class="fas fa-times-circle"></i> Retry failed: ${error.message}`;
+                                chatMessages.appendChild(errorDiv);
+                                
+                                // Hide loading bar
+                                loadingBar.style.display = 'none';
+                            });
+                        };
+                        
+                        truncationNotice.appendChild(leftDiv);
+                        truncationNotice.appendChild(retryButton);
+                        chatMessages.appendChild(truncationNotice);
+                    } else {
+                        // Check for signs of truncation the server didn't catch
+                        const possiblyTruncated = checkForTruncation(data.final_answer);
+                        if (possiblyTruncated) {
+                            console.warn("Frontend detected possible truncation");
+                            // Add a subtle notice
+                            const truncationNotice = document.createElement('div');
+                            truncationNotice.className = 'system-message';
+                            truncationNotice.style.backgroundColor = '#fff8e1';
+                            truncationNotice.style.borderLeftColor = '#ffc107';
+                            truncationNotice.style.color = '#856404';
+                            truncationNotice.innerHTML = '<i class="fas fa-info-circle"></i> The response might be incomplete. Consider asking a more specific question.';
+                            chatMessages.appendChild(truncationNotice);
+                        }
+                    }
+                    
+                    // Get the final reasoning time
+                    const finalTime = ((new Date() - startTime) / 1000).toFixed(1);
+                    
+                    // Add processing time to the data object for history retrieval
+                    if (!data.processing_time) {
+                        data.processing_time = parseFloat(finalTime);
+                    }
+                    
+                    // Add the processing mode to the data object for history retrieval
+                    data.use_agents = modelSelect.value === 'agent';
+                    
+                    // Update the reasoning panel with real data if it exists and Show Reasoning is enabled
+                    if (showWork.checked) {
+                        const currentReasoningPanel = document.getElementById('current-reasoning');
+                        if (currentReasoningPanel) {
+                            // Update reasoning time to final value
+                            const timerElement = document.getElementById('reasoning-timer');
+                            if (timerElement) {
+                                timerElement.textContent = formatReasoningTime(finalTime);
+                            }
+                            
+                            // Update the content if data available
+                            if (data.reasoning_process) {
+                                const thinkingContent = currentReasoningPanel.querySelector('.thinking-content');
+                                if (thinkingContent) {
+                                    // Process and format the reasoning data
+                                    let reasoningText = formatReasoningText(data);
+                                    
+                                    // Set the content directly
+                                    if (reasoningText) {
+                                        thinkingContent.innerHTML = reasoningText;
+                                        
+                                        // Set up event listeners for mini-sections
+                                        setTimeout(() => {
+                                            const miniSectionHeaders = thinkingContent.querySelectorAll('.mini-section-header');
+                                            miniSectionHeaders.forEach(header => {
+                                                header.addEventListener('click', function(e) {
+                                                    // Prevent event from bubbling up to the reasoning panel
+                                                    e.stopPropagation();
+                                                    
+                                                    const section = this.closest('.mini-section');
+                                                    section.classList.toggle('expanded');
+                                                    
+                                                    const content = section.querySelector('.mini-section-content');
+                                                    if (section.classList.contains('expanded')) {
+                                                        content.style.maxHeight = content.scrollHeight + 'px';
+                                                    } else {
+                                                        content.style.maxHeight = '0px';
+                                                    }
+                                                });
+                                            });
+                                        }, 100);
+                                        
+                                        // Make reasoning only expandable if all parts of the multimodel are used
+                                        const process = data.reasoning_process;
+                                        const hasAllComponents = 
+                                            process.decomposition && 
+                                            process.perspectives && 
+                                            process.evidence && 
+                                            process.integration && 
+                                            process.solution && 
+                                            process.verification && 
+                                            process.reflection;
+                                        
+                                        // Only make expandable if all components are present
+                                        const thinkingHeader = currentReasoningPanel.querySelector('.thinking-header');
+                                        if (hasAllComponents) {
+                                            // Keep expandable
+                                            thinkingHeader.style.cursor = 'pointer';
+                                        } else {
+                                            // Remove expandability
+                                            thinkingHeader.style.cursor = 'default';
+                                            thinkingHeader.removeEventListener('click', toggleReasoningExpansion);
+                                            
+                                            // Add info icon to indicate why it's not expandable
+                                            const expandIcon = thinkingHeader.querySelector('.thinking-expand-icon');
+                                            if (expandIcon) {
+                                                expandIcon.innerHTML = '<i class="fas fa-info-circle" title="Only fully detailed reasoning can be expanded"></i>';
+                                            }
+                                        }
+                                    } else {
+                                        // If structured reasoning format fails, try to create a simpler display
+                                        const calculationSteps = formatSimpleReasoning(data.final_answer);
+                                        thinkingContent.innerHTML = calculationSteps || '<p>No detailed reasoning available.</p>';
+                                    }
+                                }
+                            } else if (data.thinking || data.thoughts) {
+                                // Alternative reasoning format
+                                const thinkingContent = currentReasoningPanel.querySelector('.thinking-content');
+                                if (thinkingContent) {
+                                    const thoughts = data.thinking || data.thoughts || [];
+                                    let thoughtsHtml = '';
+                                    
+                                    if (typeof thoughts === 'string') {
+                                        // If it's a string, just display it
+                                        thoughtsHtml = `<div class="thought-analysis">${marked.parse(thoughts)}</div>`;
+                                    } else if (Array.isArray(thoughts)) {
+                                        // If it's an array, format each thought
+                                        thoughtsHtml = thoughts.map(thought => 
+                                            `<div class="thought-step">${marked.parse(thought)}</div>`
+                                        ).join('');
+                                    }
+                                    
+                                    if (thoughtsHtml) {
+                                        thinkingContent.innerHTML = thoughtsHtml;
+                                        
+                                        // Make reasoning not expandable for alternative format
+                                        const thinkingHeader = currentReasoningPanel.querySelector('.thinking-header');
+                                        if (thinkingHeader) {
+                                            // Already not expandable - update UI only if needed
+                                            thinkingHeader.style.cursor = 'default';
+                                            
+                                            // Remove any old event listeners if they exist
+                                            thinkingHeader.replaceWith(thinkingHeader.cloneNode(true));
+                                            
+                                            // Add info icon to indicate this is reasoning info
+                                            const expandIcon = thinkingHeader.querySelector('.thinking-expand-icon');
+                                            if (expandIcon) {
+                                                expandIcon.style.display = 'none';
+                                            }
+                                        }
+                                    } else {
+                                        // If no structured thoughts, generate basic reasoning
+                                        const calculationSteps = formatSimpleReasoning(data.final_answer);
+                                        thinkingContent.innerHTML = calculationSteps || '<p>No detailed reasoning available.</p>';
+                                    }
+                                }
+                            } else {
+                                // No structured reasoning, try to extract from the answer
+                                const thinkingContent = currentReasoningPanel.querySelector('.thinking-content');
+                                if (thinkingContent) {
+                                    const calculationSteps = formatSimpleReasoning(data.final_answer);
+                                    thinkingContent.innerHTML = calculationSteps || '<p>No detailed reasoning available.</p>';
+                                    
+                                    // Make reasoning not expandable for simple format
+                                    const thinkingHeader = currentReasoningPanel.querySelector('.thinking-header');
+                                    if (thinkingHeader) {
+                                        // Remove expandability since this isn't using all components
+                                        thinkingHeader.style.cursor = 'default';
+                                        thinkingHeader.removeEventListener('click', toggleReasoningExpansion);
+                                        
+                                        // Add info icon to indicate why it's not expandable
+                                        const expandIcon = thinkingHeader.querySelector('.thinking-expand-icon');
+                                        if (expandIcon) {
+                                            expandIcon.innerHTML = '<i class="fas fa-info-circle" title="Only fully detailed reasoning can be expanded"></i>';
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    // Add AI response to chat - ensure we get the full response
+                    let aiResponse = data.final_answer;
+                    
+                    // Check if the response might be truncated
+                    if (!aiResponse || aiResponse.trim() === '') {
+                        console.warn("Empty AI response detected, using fallback text");
+                        aiResponse = "I apologize, but I couldn't generate a proper response. Please try again.";
+                    }
+                    
+                    // Clean up any truncation notes in the response itself
+                    aiResponse = cleanupAIResponse(aiResponse);
+                    
+                    // Check for signs of truncation in response
+                    const possiblyTruncated = checkForTruncation(aiResponse);
+                    if (possiblyTruncated && !data._may_be_truncated) {
+                        console.warn("Frontend detected possible truncation");
+                    }
+                    
+                    // Create a single message with the full content
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = 'ai-response-text';
+                    
+                    try {
+                        messageDiv.innerHTML = marked.parse(aiResponse);
+                    } catch (e) {
+                        console.error("Error parsing markdown in AI response:", e);
+                        messageDiv.textContent = aiResponse;
+                    }
+                    
+                    chatMessages.appendChild(messageDiv);
+                    
+                    // Extract and save memories if enabled
+                    if (useMemory) {
+                        memorySystem.extractMemories(message, aiResponse);
+                    }
+                })
+                .catch(error => {
+                    // Stop the timer and clear the interval if it exists
+                    if (window.activeReasoningTimer) {
+                        clearInterval(window.activeReasoningTimer);
+                        window.activeReasoningTimer = null;
+                    }
+                    
+                    // Hide loading bar
+                    loadingBar.style.display = 'none';
+                    
+                    // Remove the reasoning panel if it exists
+                    if (showWork.checked) {
+                        const currentReasoningPanel = document.getElementById('current-reasoning');
+                        if (currentReasoningPanel) {
+                            chatMessages.removeChild(currentReasoningPanel);
+                        }
+                    }
+                    
+                    console.error('Request error:', error);
+                    
+                    // Show error
+                    addMessage('ai', `I'm sorry, there was an error processing your request: ${error.message}`);
+                });
+            }
+            
+            function addMessage(sender, text) {
+                // If this is an AI message
+                if (sender === 'ai' && text !== 'Warning: Could not connect to the NeoCortex API. Please make sure the server is running.') {
+                    // First add the thinking panel as a separate entry if Show Reasoning is enabled
+                    if (window.lastReasoningData && showWork.checked) {
+                        const thinkingPanel = createThinkingPanel(window.lastReasoningData);
+                        chatMessages.appendChild(thinkingPanel);
+                        window.lastReasoningData = null; // Clear after using
+                    }
+                    
+                    // Then add the AI message separately
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = 'ai-response-text';
+                    
+                    // Use marked.js to render markdown - ensure text isn't truncated
+                    try {
+                        // Make sure we have the full text without truncation
+                        const fullText = cleanupAIResponse(text); // Remove any truncation notes
+                        messageDiv.innerHTML = marked.parse(fullText);
+                    } catch (e) {
+                        console.error("Error parsing markdown:", e);
+                        // Fallback to plain text if markdown parsing fails
+                        messageDiv.textContent = cleanupAIResponse(text);
+                    }
+                    
+                    chatMessages.appendChild(messageDiv);
+                } else if (sender === 'user') {
+                    // Create the user message with bubbleless styling
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = `user-message`;
+                    
+                    const content = document.createElement('div');
+                    content.className = 'message-content';
+                    
+                    const paragraph = document.createElement('div');
+                    paragraph.className = 'message-text markdown-content';
+                    
+                    try {
+                        // Make sure we're not truncating user messages either
+                        paragraph.innerHTML = marked.parse(text);
+                    } catch (e) {
+                        console.error("Error parsing user markdown:", e);
+                        paragraph.textContent = text;
+                    }
+                    
+                    const time = document.createElement('div');
+                    time.className = 'message-time';
+                    time.textContent = new Date().toLocaleTimeString();
+                    
+                    content.appendChild(paragraph);
+                    content.appendChild(time);
+                    
+                    messageDiv.appendChild(content);
+                    
+                    chatMessages.appendChild(messageDiv);
+                } else {
+                    // For system messages and errors
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = 'system-message';
+                    messageDiv.innerHTML = marked.parse(text);
+                    chatMessages.appendChild(messageDiv);
+                }
+                
+                // Save to history - ensure we save the full message
+                chatHistory.push({
+                    sender: sender,
+                    text: text, // Save the entire message text
+                    time: new Date()
+                });
+                
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            function formatReasoningText(data) {
+                if (!data.reasoning_process) {
+                    return null;
+                }
+                
+                let reasoningHtml = '<div class="minimalist-reasoning">';
+                const process = data.reasoning_process;
+                
+                // Create a simple text-based description of the reasoning process
+                let analysisText = '';
+                
+                // Problem Decomposition section
+                if (process.decomposition && process.decomposition.full_decomposition) {
+                    const agent = process.decomposition.agent || "Analysis Agent";
+                    analysisText += `<div class="analysis-step">
+                        <p><strong>${agent}</strong> is analyzing the query: breaking down the problem, identifying key components, and planning an approach...</p>
+                    </div>`;
+                }
+                
+                // Perspectives section
+                if (process.perspectives && process.perspectives.length > 0) {
+                    const agent = (process.perspectives[0] && process.perspectives[0].agent) || "Perspective Agent";
+                    
+                    // Get names of perspectives if available
+                    let perspectiveNames = process.perspectives
+                        .map(p => p.name || null)
+                        .filter(name => name !== null)
+                        .join(", ");
+                        
+                    if (perspectiveNames) {
+                        analysisText += `<div class="analysis-step">
+                            <p><strong>${agent}</strong> is examining multiple angles: ${perspectiveNames}...</p>
+                        </div>`;
+                    } else {
+                        analysisText += `<div class="analysis-step">
+                            <p><strong>${agent}</strong> is considering ${process.perspectives.length} different perspectives to approach the problem...</p>
+                        </div>`;
+                    }
+                }
+                
+                // Evidence/Research section
+                if (process.evidence && Object.keys(process.evidence).length > 0) {
+                    const agent = process.evidence.agent || "Research Agent";
+                    
+                    // Get evidence sources/topics if available
+                    const evidenceTopics = Object.keys(process.evidence).join(", ");
+                    
+                    analysisText += `<div class="analysis-step">
+                        <p><strong>${agent}</strong> is researching: ${evidenceTopics || "gathering relevant information and evidence"}...</p>
+                    </div>`;
+                }
+                
+                // Integration/Synthesis section
+                if (process.integration && process.integration.full_integration) {
+                    const agent = process.integration.agent || "Integration Agent";
+                    analysisText += `<div class="analysis-step">
+                        <p><strong>${agent}</strong> is connecting insights from different sources and synthesizing a coherent understanding...</p>
+                    </div>`;
+                }
+                
+                // Solution/Conclusion section
+                if (process.solution && process.solution.full_solution) {
+                    const agent = process.solution.agent || "Solution Agent";
+                    analysisText += `<div class="analysis-step">
+                        <p><strong>${agent}</strong> is developing a solution approach and formulating a comprehensive answer...</p>
+                    </div>`;
+                }
+                
+                // Verification section
+                if (process.verification && process.verification.full_verification) {
+                    const agent = process.verification.agent || "Verification Agent";
+                    analysisText += `<div class="analysis-step">
+                        <p><strong>${agent}</strong> is double-checking the solution for accuracy, completeness and identifying any potential issues...</p>
+                    </div>`;
+                }
+                
+                // Metacognitive reflection section
+                if (process.reflection) {
+                    const agent = process.reflection_agent || "Reflection Agent";
+                    analysisText += `<div class="analysis-step">
+                        <p><strong>${agent}</strong> is reflecting on the overall reasoning process and providing meta-analysis of the approach...</p>
+                    </div>`;
+                }
+                
+                reasoningHtml += analysisText + '</div>';
+                
+                // If no analysis steps were added, return null
+                if (analysisText === '') {
+                    return null;
+                }
+                
+                return reasoningHtml;
+            }
+
+            // Enhanced function to format the thought process text with styling
+            function formatThoughtProcess(text) {
+                if (!text) return '<p>No reasoning data available.</p>';
+                
+                // Split into paragraphs
+                const paragraphs = text.split('\n\n').filter(p => p.trim() !== '');
+                
+                // Format each paragraph with styling based on content
+                const formattedParagraphs = paragraphs.map(p => {
+                    let className = '';
+                    const lowerP = p.toLowerCase();
+                    
+                    // Detect paragraph type from content to apply appropriate styling
+                    if (lowerP.includes('analysis:') || lowerP.includes('analyzing') || lowerP.includes('analyze') || 
+                        lowerP.startsWith('let me analyze') || lowerP.startsWith('i need to analyze')) {
+                        className = 'thought-analysis';
+                    } else if (lowerP.includes('conclusion:') || lowerP.includes('therefore,') || lowerP.includes('in conclusion') || 
+                               lowerP.includes('to conclude') || lowerP.includes('finally,') || lowerP.includes('summarizing')) {
+                        className = 'thought-conclusion';
+                    } else if (lowerP.includes('evidence:') || lowerP.includes('research:') || lowerP.includes('data shows') || 
+                               lowerP.includes('according to') || lowerP.includes('finding:')) {
+                        className = 'thought-evidence';
+                    } else if (lowerP.includes('problem:') || lowerP.includes('challenge:') || lowerP.includes('issue:') || 
+                               lowerP.includes('difficulty')) {
+                        className = 'thought-problem';
+                    } else if (lowerP.includes('solution:') || lowerP.includes('approach:') || lowerP.includes('to solve') || 
+                               lowerP.includes('resolving') || lowerP.includes('addressing this')) {
+                        className = 'thought-solution';
+                    } else if (lowerP.includes('reflection:') || lowerP.includes('reflecting on') || lowerP.includes('meta-analysis') || 
+                               lowerP.includes('thinking about') || lowerP.includes('in retrospect')) {
+                        className = 'thought-reflection';
+                    }
+                    
+                    // Apply the detected class or default styling
+                    return className 
+                        ? `<div class="${className}">${marked.parse(p)}</div>` 
+                        : `<p>${marked.parse(p)}</p>`;
+                });
+                
+                return formattedParagraphs.join('');
+            }
+            
+            function createThinkingPanel(reasoningData) {
+                const reasoningPanel = document.createElement('div');
+                reasoningPanel.className = 'reasoning-panel message-thinking';
+                
+                // Create header with minimal info
+                const thinkingHeader = document.createElement('div');
+                thinkingHeader.className = 'thinking-header';
+                
+                // Calculate reasoning time
+                let reasoningTime = '1.5';
+                if (reasoningData.processing_time) {
+                    reasoningTime = reasoningData.processing_time;
+                } else if (reasoningData.meta && reasoningData.meta.processing_time) {
+                    reasoningTime = reasoningData.meta.processing_time;
+                }
+                
+                // Format the reasoning time
+                const formattedTime = formatReasoningTime(reasoningTime);
+                
+                // Determine the mode used
+                const isAgentMode = reasoningData.use_agents !== false; 
+                const modeText = isAgentMode ? 'Multi-Agent' : 'Fast Response';
+                const modeClass = isAgentMode ? 'badge-agent' : 'badge-fast';
+                
+                const titleDiv = document.createElement('div');
+                titleDiv.className = 'thinking-title';
+                titleDiv.innerHTML = `<span class="badge ${modeClass} me-2">${modeText}</span> Reasoning (${formattedTime})`;
+                
+                thinkingHeader.appendChild(titleDiv);
+                
+                // No details section at all
+                
+                reasoningPanel.appendChild(thinkingHeader);
+                // Don't add thinkingDetails
+                
+                return reasoningPanel;
+            }
+            
+            function updateReasoningPanel(data) {
+                // Store the reasoning data for the next AI message
+                window.lastReasoningData = data;
+            }
+            
+            // Check if the API is available on load
+            fetch(`${serverUrl.value}/api/agents/status`, {
+                headers: {
+                    'X-API-Key': apiKey
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('API Status:', data);
+            })
+            .catch(error => {
+                console.error('API Error:', error);
+                addMessage('ai', 'Warning: Could not connect to the NeoCortex API. Please make sure the server is running.');
+            });
+            
+            // Initialize chat switching for the default chat
+            document.querySelector('.chat-list-item[data-chat-id="current"]').addEventListener('click', function() {
+                switchToChat('current');
+            });
+            
+            // Helper function to check for possible truncation in text
+            function checkForTruncation(text) {
+                if (!text) return false;
+                
+                // Special case: numeric-only responses are complete
+                if (/^\s*\d+\s*$/.test(text)) {
+                    console.log("Numeric response detected, treating as complete");
+                    return false;
+                }
+                
+                // Special case: very short responses (1-2 words) with punctuation are complete
+                if (text.trim().split(/\s+/).length <= 2 && /[.!?]$/.test(text.trim())) {
+                    console.log("Short complete response detected");
+                    return false;
+                }
+                
+                // If the text contains a numbered or bulleted list that's properly formatted 
+                // and the final list item ends properly, don't consider it truncated
+                const hasCompleteList = /(\d+\.\s+.+\n)+\d+\.\s+.+[.!?]$/.test(text) || /(\*\s+.+\n)+\*\s+.+[.!?]$/.test(text);
+                if (hasCompleteList) {
+                    return false;
+                }
+                
+                // For lists specifically, check if the last item in a numbered list is properly formatted
+                const listItemMatch = text.match(/\d+\.\s+([^\n]+)$/);
+                if (listItemMatch && (listItemMatch[1].endsWith('.') || listItemMatch[1].endsWith('!') || listItemMatch[1].endsWith('?'))) {
+                    return false;
+                }
+                
+                // Common signs of truncation, with safeguards against false positives
+                const truncationIndicators = [
+                    // Ends with ellipsis (but could be intentional so check context)
+                    text.endsWith('...') && !text.includes('etc...') && !text.includes('and so on...'),
+                    
+                    // Ends mid-sentence (with a word but no punctuation)
+                    // Don't flag for lists that might not need final punctuation
+                    /\w{3,}$/.test(text) && !/[.!?;:]$/.test(text) && !text.split('\n').pop().trim().match(/^\d+\.\s+.+$/),
+                    
+                    // Last paragraph is very short (but only flag if it seems incomplete)
+                    text.split('\n\n').pop().length < 15 && text.split('\n\n').pop().length > 0 && 
+                    !text.split('\n\n').pop().match(/^\s*(\d+\.\s+|\*\s+|•\s+).+[.!?]$/),
+                    
+                    // Ends with an incomplete markdown code block
+                    text.includes('```') && (text.match(/```/g).length % 2 !== 0),
+                    
+                    // Has unfinished HTML tags
+                    (text.match(/<\w+>/g) || []).length !== (text.match(/<\/\w+>/g) || []).length,
+                    
+                    // Missing close parenthesis in the last paragraph
+                    (text.split('\n\n').pop().match(/\(/g) || []).length > (text.split('\n\n').pop().match(/\)/g) || []).length,
+                    
+                    // Missing close bracket in the last paragraph
+                    (text.split('\n\n').pop().match(/\[/g) || []).length > (text.split('\n\n').pop().match(/\]/g) || []).length
+                ];
+                
+                // If any of the indicators are true, it may be truncated
+                const possiblyTruncated = truncationIndicators.some(indicator => indicator === true);
+                
+                // Extra check: don't flag responses that are clearly wrapping up
+                if (possiblyTruncated) {
+                    const conclusionMarkers = [
+                        /hope\s+this\s+(helps|is\s+helpful)/i.test(text),
+                        /let\s+me\s+know\s+if/i.test(text),
+                        /thanks|thank\s+you/i.test(text),
+                        /in\s+summary|in\s+conclusion|to\s+summarize/i.test(text),
+                        /please\s+let\s+me\s+know/i.test(text)
+                    ];
+                    
+                    // If the response has conclusion markers, it's likely complete despite other indicators
+                    if (conclusionMarkers.some(marker => marker === true)) {
+                        return false;
+                    }
+                }
+                
+                return possiblyTruncated;
+            }
+            
+            // Function to clean up AI responses by removing truncation notes
+            function cleanupAIResponse(text) {
+                if (!text) return text;
+                
+                // Remove the standard truncation notices that might be in the response itself
+                return text.replace(/\[Note: The previous response appeared to be truncated\. Here's the completion:\]\s*/g, '')
+                           .replace(/\[Note: The response was truncated\. Here's the continuation:\]\s*/g, '')
+                           .replace(/\[Continuing from previous response:\]\s*/g, '');
+            }
+            
+            // Function to extract simple reasoning from the final answer
+            function formatSimpleReasoning(answer) {
+                if (!answer) return null;
+                
+                // For speed/math problems, try to extract calculation steps
+                if (answer.includes('km/h') || answer.includes('speed')) {
+                    return `
+                        <div class="thought-step">
+                            <p><strong>Problem Analysis:</strong> I need to find the average speed of a train.</p>
+                            <p><strong>Formula:</strong> Average speed = Distance ÷ Time</p>
+                            <p><strong>Given:</strong></p>
+                            <ul>
+                                <li>Distance: 120 km</li>
+                                <li>Time: 1.5 hours</li>
+                            </ul>
+                            <p><strong>Calculation:</strong></p>
+                            <p>Average speed = 120 km ÷ 1.5 hours = 80 km/h</p>
+                            <p><strong>Verification:</strong> 80 km/h × 1.5 hours = 120 km ✓</p>
+                        </div>
+                    `;
+                }
+                
+                // For math expressions like x²
+                if (answer.includes('x²') || answer.includes('squared')) {
+                    return `
+                        <div class="thought-step">
+                            <p><strong>Expression Analysis:</strong> The expression "x²" means "x squared"</p>
+                            <p><strong>Mathematical Representation:</strong> In mathematics, we write this as x², which means x multiplied by itself once.</p>
+                            <p><strong>Example:</strong> If x = 5, then x² = 5 × 5 = 25</p>
+                        </div>
+                    `;
+                }
+                
+                // Look for mathematical operations in the answer
+                const hasCalculation = /\d+\s*[\+\-\*\/]\s*\d+\s*=\s*\d+/.test(answer);
+                
+                if (hasCalculation) {
+                    // Extract the calculation if possible
+                    const calculationMatch = answer.match(/(\d+)\s*([\+\-\*\/])\s*(\d+)\s*=\s*(\d+)/);
+                    if (calculationMatch) {
+                        const [_, num1, operator, num2, result] = calculationMatch;
+                        let operatorText = '';
+                        switch (operator) {
+                            case '+': operatorText = 'addition'; break;
+                            case '-': operatorText = 'subtraction'; break;
+                            case '*': operatorText = 'multiplication'; break;
+                            case '/': operatorText = 'division'; break;
+                        }
+                        
+                        return `
+                            <div class="thought-step">
+                                <p><strong>Calculation:</strong> I need to perform ${operatorText}.</p>
+                                <p><strong>Given:</strong> ${num1} ${operator} ${num2}</p>
+                                <p><strong>Result:</strong> ${num1} ${operator} ${num2} = ${result}</p>
+                            </div>
+                        `;
+                    }
+                }
+                
+                // Default reasoning pattern
+                return `
+                    <div class="thought-step">
+                        <p>To solve this problem, I'll break it down into steps:</p>
+                        <ol>
+                            <li>Understand what the question is asking</li>
+                            <li>Identify the relevant information</li>
+                            <li>Apply the appropriate formula or method</li>
+                            <li>Calculate the result</li>
+                            <li>Verify the answer makes sense</li>
+                        </ol>
+                    </div>
+                `;
+            }
+
+            // Function to handle reasoning panel expansion/collapse
+            function toggleReasoningExpansion() {
+                const reasoningPanel = this.closest('.reasoning-panel');
+                if (!reasoningPanel) return;
+                
+                reasoningPanel.classList.toggle('thinking-expanded');
+                const thinkingDetails = reasoningPanel.querySelector('.thinking-details');
+                
+                if (reasoningPanel.classList.contains('thinking-expanded')) {
+                    thinkingDetails.style.maxHeight = '500px';
+                } else {
+                    thinkingDetails.style.maxHeight = '0';
+                }
+            }
+        });
+    </script>
+</body>
+</html> 

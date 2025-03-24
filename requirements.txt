@@ -1,0 +1,6 @@
+flask==2.0.1
+PyQt5==5.15.4; platform_system != "Windows"
+pyqt5-tools>=5.15.4; platform_system == "Windows"
+flask-cors>=3.0.10
+together>=1.4.6
+requests>=2.25.1 
